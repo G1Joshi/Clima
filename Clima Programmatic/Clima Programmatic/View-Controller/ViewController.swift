@@ -5,6 +5,7 @@
 //  Created by Jeevan Chandra Joshi on 12/01/23.
 //
 
+import CoreLocation
 import UIKit
 
 class ViewController: UIViewController {
@@ -20,6 +21,7 @@ class ViewController: UIViewController {
     let spacer = UIView()
 
     var weatherService = WeatherService()
+    var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,9 @@ class ViewController: UIViewController {
         setupConstraint()
         searchField.delegate = self
         weatherService.delegate = self
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
     }
 
     func setupUi() {
@@ -58,6 +63,9 @@ class ViewController: UIViewController {
 
         locationButton.setBackgroundImage(UIImage(systemName: "location.circle.fill"), for: .normal)
         locationButton.tintColor = .label
+        locationButton.addAction(UIAction(handler: { _ in
+            self.locationManager.requestLocation()
+        }), for: .touchUpInside)
 
         searchField.placeholder = "Search"
         searchField.textAlignment = .center
@@ -143,6 +151,21 @@ extension ViewController: WeatherServiceDelegate {
     }
 
     func didFailWithError(_ error: Error) {
+        print(error)
+    }
+}
+
+extension ViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
+            weatherService.fetchWeather(lat, lon)
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
 }

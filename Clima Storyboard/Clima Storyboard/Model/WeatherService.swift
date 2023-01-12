@@ -5,6 +5,7 @@
 //  Created by Jeevan Chandra Joshi on 12/01/23.
 //
 
+import CoreLocation
 import Foundation
 
 protocol WeatherServiceDelegate {
@@ -15,9 +16,16 @@ protocol WeatherServiceDelegate {
 struct WeatherService {
     var delegate: WeatherServiceDelegate?
 
+    let apiKey = ""
+    let baseUrl = "https://api.openweathermap.org/data/2.5/weather"
+
     func fetchWeather(_ city: String) {
-        let apiKey = ""
-        let endpoint = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&units=metric&appid=\(apiKey)"
+        let endpoint = "\(baseUrl)?q=\(city)&units=metric&appid=\(apiKey)"
+        performRequest(endpoint)
+    }
+
+    func fetchWeather(_ lat: CLLocationDegrees, _ lon: CLLocationDegrees) {
+        let endpoint = "\(baseUrl)?lat=\(lat)&lon=\(lon)&units=metric&appid=\(apiKey)"
         performRequest(endpoint)
     }
 
