@@ -37,11 +37,11 @@
                                                     <backgroundConfiguration key="background" image="location.circle.fill" catalog="system"/>
                                                 </buttonConfiguration>
                                             </button>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jgl-qH-IcZ">
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jgl-qH-IcZ">
                                                 <rect key="frame" x="60" y="0.0" width="270" height="50"/>
                                                 <color key="backgroundColor" systemColor="systemFillColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" returnKeyType="go"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTf-cm-rWR">
                                                 <rect key="frame" x="340" y="0.0" width="50" height="50"/>
@@ -54,6 +54,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="magnifyingglass" catalog="system"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="searchPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s0M-gX-q2N"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -100,6 +103,12 @@
                             <constraint firstAttribute="trailingMargin" secondItem="4Kw-qp-LC2" secondAttribute="trailing" id="xaZ-bp-D12"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cityLabel" destination="AyM-Jg-Y9w" id="DFM-Ek-hRc"/>
+                        <outlet property="iconImageView" destination="vGW-xu-03Y" id="86i-4N-0BF"/>
+                        <outlet property="searchField" destination="jgl-qH-IcZ" id="dmf-F5-kVk"/>
+                        <outlet property="tempLabel" destination="3qn-gq-UEf" id="Rhj-WN-01D"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
