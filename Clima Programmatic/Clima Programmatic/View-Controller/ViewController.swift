@@ -19,10 +19,14 @@ class ViewController: UIViewController {
     let cityLabel = UILabel()
     let spacer = UIView()
 
+    var weatherService = WeatherService()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUi()
         setupConstraint()
+        searchField.delegate = self
+        weatherService.delegate = self
     }
 
     func setupUi() {
@@ -60,9 +64,14 @@ class ViewController: UIViewController {
         searchField.textColor = .label
         searchField.backgroundColor = .systemFill
         searchField.font = .systemFont(ofSize: 25)
+        searchField.clearsOnBeginEditing = true
+        searchField.returnKeyType = .go
 
         searchButton.setBackgroundImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         searchButton.tintColor = .label
+        searchButton.addAction(UIAction(handler: { _ in
+            self.searchField.endEditing(true)
+        }), for: .touchUpInside)
 
         iconImageView.image = UIImage(systemName: "sun.max")
         iconImageView.tintColor = .label
@@ -103,5 +112,37 @@ class ViewController: UIViewController {
             iconImageView.heightAnchor.constraint(equalToConstant: 120),
             iconImageView.widthAnchor.constraint(equalToConstant: 120),
         ])
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
+    }
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        return textField.text != ""
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let cityName = textField.text {
+            weatherService.fetchWeather(cityName)
+        }
+        textField.text = ""
+    }
+}
+
+extension ViewController: WeatherServiceDelegate {
+    func didWeatherUpdate(_ weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.tempLabel.text = String(format: "%.1f°C", weather.temp)
+            self.iconImageView.image = UIImage(systemName: weather.conditionName)
+            self.cityLabel.text = weather.name
+        }
+    }
+
+    func didFailWithError(_ error: Error) {
+        print(error)
     }
 }
